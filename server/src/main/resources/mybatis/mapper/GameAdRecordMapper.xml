@@ -1,0 +1,180 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"  "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<!--功能描述： 创建人： 创建时间：2019-12-19 13:47:58 修改人： 修改时间：2019-12-19 13:47:58 修改备注： @version 1.0.0 -->
+<mapper namespace="com.colin.server.mapper.GameAdRecordMapper">
+	<resultMap id="tGameAdRecordResult" type="com.colin.server.entity.GameAdRecordPO">
+		<result property="id" column="ID" />
+		<result property="adId" column="AD_ID" />
+		<result property="platformId" column="PLATFORM_ID" />
+		<result property="slwId" column="SLW_ID" />
+		<result property="numberId" column="NUMBER_ID" />
+		<result property="recordTime" column="RECORD_TIME" />
+		<result property="state" column="STATE" />
+	</resultMap>
+
+	<!-- 查询条件 -->
+	<sql id="Base_Where_Clause">
+		where 1=1
+		<trim suffixOverrides=",">
+			<if test="id != null">
+	    <![CDATA[ and  t.ID=#{id} ]]>
+			</if>
+			<if test="adId != null and adId != ''">
+	    <![CDATA[ and  t.AD_ID=#{adId} ]]>
+			</if>
+			<if test="platformId != null">
+	    <![CDATA[ and  t.PLATFORM_ID=#{platformId} ]]>
+			</if>
+			<if test="slwId != null">
+	    <![CDATA[ and  t.SLW_ID=#{slwId} ]]>
+			</if>
+			<if test="numberId != null">
+	    <![CDATA[ and  t.NUMBER_ID=#{numberId} ]]>
+			</if>
+			<if test="recordTime != null">
+	    <![CDATA[ and  t.RECORD_TIME=#{recordTime} ]]>
+			</if>
+			<if test="state != null">
+	    <![CDATA[ and  t.STATE=#{state} ]]>
+			</if>
+		</trim>
+	</sql>
+
+	<!-- tableColumns 所有列 -->
+	<sql id="tableColumns">
+		<trim suffix="" suffixOverrides=",">
+			t.ID,t.AD_ID,t.PLATFORM_ID,t.SLW_ID,t.NUMBER_ID,t.RECORD_TIME,t.STATE
+		</trim>
+	</sql>
+
+	<!-- insertColumns 入库列 -->
+	<sql id="insertColumns">
+		<trim suffix="" suffixOverrides=",">
+			<if test="id != null">
+				ID ,
+			</if>
+			<if test="adId != null and adId != ''">
+				AD_ID ,
+			</if>
+			<if test="platformId != null">
+				PLATFORM_ID ,
+			</if>
+			<if test="slwId != null">
+				SLW_ID ,
+			</if>
+			<if test="numberId != null">
+				NUMBER_ID ,
+			</if>
+			<if test="recordTime != null">
+				RECORD_TIME ,
+			</if>
+			<if test="state != null">
+				STATE ,
+			</if>
+		</trim>
+	</sql>
+
+	<!-- insertParams 入库值 -->
+	<sql id="insertParams">
+		<trim suffix="" suffixOverrides=",">
+			<if test="id != null">
+				#{id} ,
+			</if>
+			<if test="adId != null and adId != ''">
+				#{adId} ,
+			</if>
+			<if test="platformId != null">
+				#{platformId} ,
+			</if>
+			<if test="slwId != null">
+				#{slwId} ,
+			</if>
+			<if test="numberId != null">
+				#{numberId} ,
+			</if>
+			<if test="recordTime != null">
+				#{recordTime} ,
+			</if>
+			<if test="state != null">
+				#{state} ,
+			</if>
+		</trim>
+	</sql>
+
+	<!-- updateParams 更新列 -->
+	<sql id="updateParams">
+		<trim suffix="" suffixOverrides=",">
+			<if test="adId != null and adId != ''">
+				t.AD_ID=#{adId},
+			</if>
+			<if test="platformId != null">
+				t.PLATFORM_ID=#{platformId},
+			</if>
+			<if test="slwId != null">
+				t.SLW_ID=#{slwId},
+			</if>
+			<if test="numberId != null">
+				t.NUMBER_ID=#{numberId},
+			</if>
+			<if test="recordTime != null">
+				t.RECORD_TIME=#{recordTime},
+			</if>
+			<if test="state != null">
+				t.STATE=#{state},
+			</if>
+		</trim>
+	</sql>
+
+	<!-- where 条件 -->
+	<sql id="where">
+		where 1=1
+	</sql>
+	<!-- columnKey 主键 列名称 -->
+	<sql id="columnKey">
+	and t.id=#{id}
+	</sql>
+
+	<!-- 添加,插入记录 -->
+	<insert id="insert" parameterType="com.colin.server.entity.GameAdRecordPO">
+		insert into T_GAME_AD_RECORD (<include refid="insertColumns" />) values(<include refid="insertParams" />)
+	</insert>
+
+	<!-- 删除,主键删除 -->
+	<delete id="deleteByPrimaryKey" parameterType="com.colin.server.entity.GameAdRecordPO">
+		delete from T_GAME_AD_RECORD t where t.ID=#{id}
+	</delete>
+
+	<!-- 修改,主键更新 -->
+	<update id="updateByPrimaryKey" parameterType="com.colin.server.entity.GameAdRecordPO">
+		update T_GAME_AD_RECORD t
+		<set>
+			<include refid="updateParams" />
+		</set>
+		where t.ID=#{id}
+	</update>
+
+	<!-- 查询,主键查询 -->
+	<select id="selectByPrimaryKey" resultMap="tGameAdRecordResult" parameterType="com.colin.server.entity.GameAdRecordPO">
+		select
+		<include refid="tableColumns" />
+		from T_GAME_AD_RECORD t
+		<include refid="Base_Where_Clause" />
+	</select>
+
+	<!-- 查询,实体查询 -->
+	<select id="selectByEntity" resultMap="tGameAdRecordResult" parameterType="com.colin.server.entity.GameAdRecordPO">
+		select
+		<include refid="tableColumns" />
+		from T_GAME_AD_RECORD t
+		<include refid="Base_Where_Clause" />
+	</select>
+	
+	<!-- 查询,map查询 -->
+    <select id="selectByMap" resultMap="tGameAdRecordResult" parameterType="java.util.Map">
+		select
+		<include refid="tableColumns" />
+		from T_GAME_AD_RECORD t
+		<include refid="Base_Where_Clause" />
+	</select>
+
+</mapper>   

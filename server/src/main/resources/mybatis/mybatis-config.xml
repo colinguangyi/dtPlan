@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE configuration PUBLIC "-//mybatis.org//DTD Config 3.0//EN" "http://mybatis.org/dtd/mybatis-3-config.dtd">
+<configuration>
+    <!-- 配置缓存 -->
+    <settings>
+        <setting name="cacheEnabled" value="false"/>
+        <setting name="lazyLoadingEnabled" value="false"/>
+        <setting name="multipleResultSetsEnabled" value="false"/>
+        <setting name="useColumnLabel" value="true"/>
+        <!-- 开启mybatis日志,3.2.7以上版本的配置 -->
+        <setting name="logPrefix" value="mybatis.log."/>
+    </settings>
+
+</configuration>

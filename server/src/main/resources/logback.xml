@@ -1,0 +1,45 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<configuration>
+    <!-- 自定义配置 -->
+    <property name="log.appName" value="server" />
+    <property name="log.path" value="/colin/logs" />
+    <property name="log.level" value="INFO" />
+    <property name="log.filePattern" value="%d{yyyy-MM-dd HH:mm:ss.SSS}|%level|%thread|%X{clientIp}|%X{transId}|%c.%M[%L]|%msg%n" />
+    <property name="log.consolePattern" value="%red(%d{yyyy-MM-dd HH:mm:ss.SSS})|%highlight(%level)|%green(%thread)|%X{clientIp}|%X{transId}|%boldMagenta(%c.%M[%L])|%cyan(%msg%n)" />
+
+    <!-- 控制台 -->
+	<appender name="STDOUT" class="ch.qos.logback.core.ConsoleAppender">
+        <encoder class="ch.qos.logback.classic.encoder.PatternLayoutEncoder">
+            <pattern>${log.consolePattern}</pattern>
+        </encoder>
+    </appender>
+
+    <!-- 默认输出文件 -->
+    <appender name="FILE" class="ch.qos.logback.core.rolling.RollingFileAppender">
+        <rollingPolicy class="ch.qos.logback.core.rolling.SizeAndTimeBasedRollingPolicy">
+            <FileNamePattern>${log.path}/${log.appName}/${log.appName}.%d{yyyy-MM-dd}.%i.log</FileNamePattern>
+            <maxHistory>15</maxHistory>
+            <maxFileSize>500MB</maxFileSize>
+            <totalSizeCap>20GB</totalSizeCap>
+        </rollingPolicy>
+        <encoder class="ch.qos.logback.classic.encoder.PatternLayoutEncoder">
+            <pattern>${log.filePattern}</pattern>
+            <charset>UTF-8</charset>
+        </encoder>
+    </appender>
+
+    <!--异步输出文件日志，当日志较大时，此处用法需要注意调整，在不确认的情况下先取消异步输出-->
+<!--    <appender name="ASYNC_FILE" class="ch.qos.logback.classic.AsyncAppender">-->
+<!--        <queueSize>512</queueSize>-->
+<!--        <discardingThreshold>0</discardingThreshold>-->
+<!--        <includeCallerData>true</includeCallerData>-->
+<!--        <neverBlock>true</neverBlock>-->
+<!--        <appender-ref ref="FILE" />-->
+<!--    </appender>-->
+
+    <root level="INFO">
+   		<appender-ref ref="STDOUT"/>
+        <appender-ref ref="FILE"/>
+    </root>
+
+</configuration>
