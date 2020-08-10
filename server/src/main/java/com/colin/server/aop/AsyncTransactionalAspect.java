@@ -5,7 +5,7 @@ import com.colin.server.exception.ServerAException;
 import com.colin.server.handle.AsyncTransactionHandle;
 import com.colin.server.request.BaseRequest;
 import com.colin.server.util.JedisUtil;
-import com.colin.server.util.ASyncTransConstants;
+import com.colin.server.util.AsyncTransConstants;
 import javax.annotation.Resource;
 import org.apache.commons.lang.StringUtils;
 import org.aspectj.lang.ProceedingJoinPoint;
@@ -42,14 +42,14 @@ public class AsyncTransactionalAspect {
      */
     @Around("pointcut()")
     public Object processBefore(ProceedingJoinPoint joinPoint) throws Exception{
-        Object result = null;
+        Object result;
         //当前事务ID
         String transId = null;
         //其他关联事务ID
         String relateTransIds = null;
         try{
             //获取事务相关参数
-            Object args = null;
+            Object args;
             Object[] argsArray = joinPoint.getArgs();
             if(argsArray != null && argsArray.length > 0) {
                 args = argsArray[0];
@@ -69,7 +69,7 @@ public class AsyncTransactionalAspect {
             throw e;
         } catch (Throwable t){
             curFailDeal(transId, relateTransIds);
-            logger.error("AsyncTransactionalAspect_error:", t);
+            logger.error("AsyncTransactionalAspect_processBefore_error:", t);
             throw new ServerAException(StatusEnum.ST_500.getCode(), "当前方法异常");
         }
         return result;
@@ -84,7 +84,7 @@ public class AsyncTransactionalAspect {
     private void curSuccessDeal(String transId, String relateTransIds) throws Exception{
         if(StringUtils.isNotBlank(transId) && StringUtils.isNotBlank(relateTransIds)){
             //将当前事务标记为成功
-            JedisUtil.setEx(transId, ASyncTransConstants.TRANS_DONE, ASyncTransConstants.EXPIRE_TIME);
+            JedisUtil.setEx(transId, AsyncTransConstants.TRANS_DONE, AsyncTransConstants.EXPIRE_TIME);
             //进行异步事务判断处理
             asyncTransactionHandle.handle(relateTransIds);
         }
@@ -93,11 +93,14 @@ public class AsyncTransactionalAspect {
     /**
      * 当前事务失败处理
      * @param transId 当前事务ID
-     * @throws Exception 抛出异常
      */
-    private void curFailDeal(String transId, String relateTransIds) throws Exception{
-        if(StringUtils.isNotBlank(transId) && StringUtils.isNotBlank(relateTransIds)){
-            JedisUtil.del(transId);
+    private void curFailDeal(String transId, String relateTransIds){
+        try{
+            if(StringUtils.isNotBlank(transId) && StringUtils.isNotBlank(relateTransIds)){
+                JedisUtil.del(transId);
+            }
+        }catch (Exception e){
+            logger.error("AsyncTransactionalAspect_curFailDeal_error:", e);
         }
     }
 

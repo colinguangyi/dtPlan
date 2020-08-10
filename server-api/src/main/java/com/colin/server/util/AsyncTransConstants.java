@@ -3,7 +3,7 @@ package com.colin.server.util;
 /**
  * @author zhaolz
  */
-public class ASyncTransConstants {
+public class AsyncTransConstants {
     /**
      * 事务标识时效（秒）
      */

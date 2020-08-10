@@ -7,7 +7,7 @@ import com.colin.client.util.JedisUtil;
 import com.colin.server.feignservice.RecordService;
 import com.colin.server.request.RecordSaveRequest;
 import com.colin.server.request.RecordUpdateRequest;
-import com.colin.server.util.ASyncTransConstants;
+import com.colin.server.util.AsyncTransConstants;
 import com.colin.server.util.IdUtil;
 import javax.annotation.Resource;
 import org.apache.commons.lang.StringUtils;
@@ -28,8 +28,8 @@ public class RecordController {
         //创建异步事务标志
         String transId1 = IdUtil.getUUID();
         String transId2 = IdUtil.getUUID();
-        JedisUtil.setEx(transId1, ASyncTransConstants.TRANS_READY, ASyncTransConstants.EXPIRE_TIME);
-        JedisUtil.setEx(transId2, ASyncTransConstants.TRANS_READY, ASyncTransConstants.EXPIRE_TIME);
+        JedisUtil.setEx(transId1, AsyncTransConstants.TRANS_READY, AsyncTransConstants.EXPIRE_TIME);
+        JedisUtil.setEx(transId2, AsyncTransConstants.TRANS_READY, AsyncTransConstants.EXPIRE_TIME);
 
         //事务一
         RecordSaveRequest saveRequest = new RecordSaveRequest();
@@ -55,15 +55,15 @@ public class RecordController {
         threadPool.putThread(updateRunnable);
 
         //判断最终结果
-        String result1 = null;
-        String result2 = null;
+        String result1;
+        String result2;
         while(true){
             result1 = JedisUtil.get(transId1);
             result2 = JedisUtil.get(transId2);
             if(StringUtils.isBlank(result1) && StringUtils.isBlank(result2)){
                 return "FAIL";
             }
-            if(ASyncTransConstants.TRANS_DONE.equals(result1) && ASyncTransConstants.TRANS_DONE.equals(result2)){
+            if(AsyncTransConstants.TRANS_DONE.equals(result1) && AsyncTransConstants.TRANS_DONE.equals(result2)){
                 return "SUCCESS";
             }
             try {

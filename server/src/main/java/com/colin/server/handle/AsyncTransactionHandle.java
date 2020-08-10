@@ -3,7 +3,7 @@ package com.colin.server.handle;
 import com.colin.server.properties.TransProperties;
 import com.colin.server.exception.ServerAException;
 import com.colin.server.util.JedisUtil;
-import com.colin.server.util.ASyncTransConstants;
+import com.colin.server.util.AsyncTransConstants;
 import javax.annotation.Resource;
 import org.apache.commons.lang.StringUtils;
 import org.springframework.stereotype.Component;
@@ -39,7 +39,7 @@ public class AsyncTransactionHandle {
                     throw new ServerAException(key+"处理失败");
                 }
                 //存在未处理完成的事务，进入等待
-                if(ASyncTransConstants.TRANS_READY.equals(value)){
+                if(AsyncTransConstants.TRANS_READY.equals(value)){
                     done = false;
                     break;
                 }
